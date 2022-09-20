@@ -11,17 +11,12 @@ def input_changed_handler(args: adsk.core.InputChangedEventArgs):
     if args.input.id == 'startPoint' or args.input.id == 'endPoint':
         start_point_input.value = min(start_point_input.value, spline.count)
         end_point_input.value = min(end_point_input.value, spline.count)
-
-        if (end_point_input.value < 0):
-            num_points_input.value = spline.count - start_point_input.value
-        else:
-            num_points_input.value = end_point_input.value - start_point_input.value
+        num_points_input.value = end_point_input.value - start_point_input.value + 1
     
     # Update endPoint based on start/numPoints
     if args.input.id == 'numPoints':
-        num_points_input.value = min(num_points_input.value, spline.count - start_point_input.value)
-        
-        end_point_input.value = start_point_input.value + num_points_input.value
+        num_points_input.value = min(num_points_input.value, spline.count - start_point_input.value + 1)
+        end_point_input.value = start_point_input.value + num_points_input.value - 1
 
     # Show construction plane input as necessary
     if args.input.id == 'plane':

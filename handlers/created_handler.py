@@ -38,13 +38,13 @@ def create_handler(args: adsk.core.CommandCreatedEventArgs):
         command_inputs['plane'] = construction_plane_input
 
         # Start point
-        start_point_input = inputs.addIntegerSpinnerCommandInput('startPoint', 'Start Point', 0, 1000000, 1, 0)
-        start_point_input.tooltip = 'Start point to draw (0 for beginning)'
+        start_point_input = inputs.addIntegerSpinnerCommandInput('startPoint', 'Start Point', 1, 1000000, 1, 1)
+        start_point_input.tooltip = 'Start point to draw (1 for beginning)'
         command_inputs['startPoint'] = start_point_input
 
         # End point
-        end_point_input = inputs.addIntegerSpinnerCommandInput('endPoint', 'End Point', -1, 1000000, 1, -1)
-        end_point_input.tooltip = 'End point to draw (0 for beginning, -1 for end)'
+        end_point_input = inputs.addIntegerSpinnerCommandInput('endPoint', 'End Point', 1, 1000000, 1, 1)
+        end_point_input.tooltip = 'End point to draw (1 for beginning)'
         command_inputs['endPoint'] = end_point_input
 
         # Num points

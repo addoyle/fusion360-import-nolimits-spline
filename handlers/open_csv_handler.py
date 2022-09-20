@@ -1,5 +1,5 @@
 import io, adsk.core, json
-from ..common.util import ui, spline, update_points_new_spline
+from ..common.util import ui, spline, command_inputs
 from mimetypes import init
 
 def browse_btn_handler(args: adsk.core.HTMLEventArgs):
@@ -37,8 +37,24 @@ def open_csv(browser_input: adsk.core.BrowserCommandInput):
         
         if (len(spline.center)):
             browser_input.sendInfoToHTML('update', json.dumps({'count': len(spline.center)}))
-    
-    update_points_new_spline()
+
+    # Update point index inputs
+    start_point_input: adsk.core.IntegerSpinnerCommandInput = command_inputs['startPoint']
+    end_point_input: adsk.core.IntegerSpinnerCommandInput = command_inputs['endPoint']
+
+    if (spline.count):
+        if start_point_input.value > spline.count:
+            start_point_input.value = 1
+        if end_point_input.value > spline.count or end_point_input.value == 1:
+            end_point_input.value = spline.count
+
+        # Force trigger value input change handler
+        prev = start_point_input.value
+        start_point_input.value = 0
+        start_point_input.value = prev
+    else:
+        start_point_input.value = 1
+        end_point_input.value = 1
 
 def add_point(point):
     c_point = [float(i) for i in point[1:4]]

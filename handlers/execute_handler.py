@@ -43,4 +43,4 @@ def execute_handler(args: adsk.core.CommandEventArgs):
                 sketch.sketchCurves.sketchFittedSplines.add(right_points)
 
 def points_in_range(pts: array, start: int, end: int):
-    return pts[start:end]
+    return pts[start - 1:end]
