@@ -3,46 +3,44 @@ import adsk.core, adsk.fusion
 from ..common.util import app, ui, spline
 
 def execute_handler(args: adsk.core.CommandEventArgs):
-    global app, ui, spline
-
     root = adsk.fusion.Design.cast(app.activeProduct).rootComponent
 
     inputs = args.command.commandInputs
 
-    show_left_spline: adsk.core.BoolValueCommandInput = inputs.itemById('leftSpline')
-    show_right_spline: adsk.core.BoolValueCommandInput = inputs.itemById('rightSpline')
-    plane_selection_input: adsk.core.SelectionCommandInput = inputs.itemById('plane')
+    spline_chooser: adsk.core.ButtonRowCommandInput = inputs.itemById('railSplines')
+    show_left_spline = spline_chooser.listItems.item(0).isSelected
+    show_center_spline = spline_chooser.listItems.item(1).isSelected
+    show_right_spline = spline_chooser.listItems.item(2).isSelected
+    plane_selection_input = inputs.itemById('plane')
 
-    limit_input: adsk.core.IntegerSpinnerCommandInput = inputs.itemById('limit')
-    offset_input: adsk.core.IntegerSpinnerCommandInput = inputs.itemById('offset')
+    start_point_input: adsk.core.IntegerSpinnerCommandInput = inputs.itemById('startPoint')
+    end_point_input: adsk.core.IntegerSpinnerCommandInput = inputs.itemById('endPoint')
     
     if plane_selection_input.selectionCount:
         sketch: adsk.fusion.Sketch = root.sketches.add(plane_selection_input.selection(0).entity)
         sketch.name = 'Track Reference'
 
-        if spline.center.count:
-            center_points = adsk.core.ObjectCollection.create()
-            for pt in points_in_range(spline.center, limit_input.value, offset_input.value):
-                center_points.add(pt)
+        if spline.count:
+            if show_center_spline:
+                center_points = adsk.core.ObjectCollection.create()
+                for pt in points_in_range(spline.center, start_point_input.value, end_point_input.value):
+                    center_points.add(pt)
 
-            sketch.sketchCurves.sketchFittedSplines.add(center_points)
+                sketch.sketchCurves.sketchFittedSplines.add(center_points)
 
-        if (spline.left.count and show_left_spline.value):
-            left_points = adsk.core.ObjectCollection.create()
-            for pt in points_in_range(spline.left, limit_input.value, offset_input.value):
-                left_points.add(pt)
+            if show_left_spline:
+                left_points = adsk.core.ObjectCollection.create()
+                for pt in points_in_range(spline.left, start_point_input.value, end_point_input.value):
+                    left_points.add(pt)
 
-            sketch.sketchCurves.sketchFittedSplines.add(left_points)
-            
-        if (spline.right.count and show_right_spline.value):
-            right_points = adsk.core.ObjectCollection.create()
-            for pt in points_in_range(spline.right, limit_input.value, offset_input.value):
-                right_points.add(pt)
+                sketch.sketchCurves.sketchFittedSplines.add(left_points)
+                
+            if show_right_spline:
+                right_points = adsk.core.ObjectCollection.create()
+                for pt in points_in_range(spline.right, start_point_input.value, end_point_input.value):
+                    right_points.add(pt)
 
-            sketch.sketchCurves.sketchFittedSplines.add(right_points)
+                sketch.sketchCurves.sketchFittedSplines.add(right_points)
 
-def points_in_range(pts: array, limit: int, offset: int):
-    if (limit == 0):
-        return pts[offset:]
-    else:
-        return pts[offset:offset + limit]
+def points_in_range(pts: array, start: int, end: int):
+    return pts[start:end]

@@ -1,21 +1,24 @@
 import io, adsk.core, json
-from ..common.util import log, ui, spline
+from ..common.util import ui, spline, update_points_new_spline
 from mimetypes import init
 
 def browse_btn_handler(args: adsk.core.HTMLEventArgs):
-    global ui, spline
-
-    browser_input = args.browserCommandInput
-
     if (args.action == 'click' and args.data == 'browseBtn'):
-        dlg = ui.createFileDialog()
-        dlg.title = 'Open NoLimits Spline CSV'
-        dlg.filter = 'Comma Separated Values (*.csv);;All Files (*.*)'
-        if (dlg.showOpen() != adsk.core.DialogResults.DialogOK):
+        open_csv(args.browserCommandInput)
 
-            browser_input.sendInfoToHTML('reset', '{}')
-            return
 
+def activated_handler(args: adsk.core.CommandEventArgs):
+    if (not spline.count):
+        open_csv(args.command.commandInputs.itemById('splineDataBtn'))
+
+def open_csv(browser_input: adsk.core.BrowserCommandInput):
+    dlg = ui.createFileDialog()
+    dlg.title = 'Open NoLimits Spline CSV'
+    dlg.filter = 'Comma Separated Values (*.csv);;All Files (*.*)'
+    if (dlg.showOpen() != adsk.core.DialogResults.DialogOK):
+        browser_input.sendInfoToHTML('reset', '{}')
+        spline.clear()
+    else:
         filename = dlg.filename
         with io.open(filename, 'r', encoding='utf-8-sig') as f:
             # First line is the header row
@@ -32,13 +35,12 @@ def browse_btn_handler(args: adsk.core.HTMLEventArgs):
                 add_point(line.split('\t'))
                 line = f.readline()
         
-        if (spline.center.count):
+        if (len(spline.center)):
             browser_input.sendInfoToHTML('update', json.dumps({'count': len(spline.center)}))
-            
+    
+    update_points_new_spline()
 
 def add_point(point):
-    global spline
-
     c_point = [float(i) for i in point[1:4]]
     l_point = [float(i) for i in point[7:10]]
 
@@ -47,4 +49,9 @@ def add_point(point):
     spline.right.append(to_point3ds([a - b for a, b in zip(c_point, l_point)]))
 
 def to_point3ds(coord):
-    return adsk.core.Point3D.create(coord[0], -coord[1], coord[2])
+    return adsk.core.Point3D.create(
+        # Flip y/z because NL orientation is Y-up, Fusion 360 is Z-up
+        coord[0],   # x
+        coord[2],   # z
+        coord[1]    # y
+    )

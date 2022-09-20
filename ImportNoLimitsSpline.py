@@ -10,8 +10,6 @@ ID = 'ImportNLSplineCMDDef'
 TOOLBAR_PANEL = 'SolidScriptsAddinsPanel'
 
 def run(context):
-    global app, ui, handlers
-
     try:
         product = app.activeProduct
         design = adsk.fusion.Design.cast(product)

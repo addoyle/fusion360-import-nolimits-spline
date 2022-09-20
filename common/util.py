@@ -6,6 +6,9 @@ from ..model.Spline import Spline
 # Handlers should be added here to keep them in scope
 handlers = []
 
+# Easier access to form inputs
+command_inputs = {}
+
 # Spline data
 spline = Spline()
 
@@ -73,3 +76,23 @@ def handle_error(name: str, show_message_box: bool = False):
 
     if show_message_box:
         ui.messageBox(f'{name}\n{traceback.format_exc()}')
+
+def update_points_new_spline():
+    global command_inputs, spline
+
+    start_point_input: adsk.core.IntegerSpinnerCommandInput = command_inputs['startPoint']
+    end_point_input: adsk.core.IntegerSpinnerCommandInput = command_inputs['endPoint']
+
+    if (spline.count):
+        if start_point_input.value > spline.count:
+            start_point_input.value = 0
+        if end_point_input.value > spline.count:
+            end_point_input.value = -1
+
+        # Force trigger value input change handler
+        prev = start_point_input.value
+        start_point_input.value = -1
+        start_point_input.value = prev
+    else:
+        start_point_input.value = 0
+        end_point_input.value = -1
