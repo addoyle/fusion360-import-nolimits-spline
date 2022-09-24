@@ -17,16 +17,3 @@ def input_changed_handler(args: adsk.core.InputChangedEventArgs):
     if args.input.id == 'numPoints':
         num_points_input.value = min(num_points_input.value, spline.count - start_point_input.value + 1)
         end_point_input.value = start_point_input.value + num_points_input.value - 1
-
-    # Show construction plane input as necessary
-    if args.input.id == 'plane':
-        design = adsk.fusion.Design.cast(app.activeProduct)
-        root = design.rootComponent
-
-        # Show/hide construction plane picker
-        if (plane_input.selectionCount == 0):
-            log('turning on the origin')
-            root.isOriginFolderLightBulbOn = True
-        else:
-            log('turning off the origin')
-            root.isOriginFolderLightBulbOn = False
