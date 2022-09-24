@@ -1,6 +1,5 @@
 import io, adsk.core, json
-from ..common.util import ui, spline, command_inputs
-from mimetypes import init
+from ....common.util import ui, spline, command_inputs
 
 def browse_btn_handler(args: adsk.core.HTMLEventArgs):
     if (args.action == 'click' and args.data == 'browseBtn'):

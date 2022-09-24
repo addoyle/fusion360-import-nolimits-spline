@@ -5,7 +5,7 @@ from .execute_handler import execute_handler
 from .input_changed_handler import input_changed_handler
 from .open_csv_handler import activated_handler, browse_btn_handler
 from .validate_input_handler import validate_input_handler
-from ..common.util import app, add_handler, handle_error, command_inputs
+from ....common.util import app, add_handler, handle_error, command_inputs
 
 RESOURCES = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../resources', ''))
 
@@ -23,7 +23,7 @@ def create_handler(args: adsk.core.CommandCreatedEventArgs):
         inputs = args.command.commandInputs
         
         # Open file button
-        inputs.addBrowserCommandInput('splineDataBtn', 'Spline Data', 'resources/browse.html', 28)
+        inputs.addBrowserCommandInput('splineDataBtn', 'Spline Data', 'commands/spline/resources/browse.html', 28)
 
         # Spline rail chooser
         railRow = inputs.addButtonRowCommandInput('railSplines', 'Rail Splines', True)
@@ -36,6 +36,14 @@ def create_handler(args: adsk.core.CommandCreatedEventArgs):
         construction_plane_input.addSelectionFilter(adsk.core.SelectionCommandInput.ConstructionPlanes)
         construction_plane_input.addSelection(design.rootComponent.xYConstructionPlane)
         command_inputs['plane'] = construction_plane_input
+
+        inputs.addTextBoxCommandInput('note', '', '''
+        <hr />
+        <p>
+            <strong>Note:</strong> Recommend inserting spline in sections as Fusion 360
+            will struggle with too many points. Suggest no more than 250 points at a time.
+        </p>
+        ''', 7, True)
 
         # Start point
         start_point_input = inputs.addIntegerSpinnerCommandInput('startPoint', 'Start Point', 1, 1000000, 1, 1)

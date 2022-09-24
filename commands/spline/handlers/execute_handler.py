@@ -1,6 +1,6 @@
 from array import array
 import adsk.core, adsk.fusion
-from ..common.util import app, ui, spline
+from ....common.util import app, spline
 
 def execute_handler(args: adsk.core.CommandEventArgs):
     root = adsk.fusion.Design.cast(app.activeProduct).rootComponent
