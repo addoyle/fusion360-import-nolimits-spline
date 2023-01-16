@@ -1,7 +1,9 @@
 from .spline import entry as spline
+from .supports import entry as supports
 
 commands = [
-    spline
+    spline,
+    supports
 ]
 
 def start():

@@ -1,5 +1,5 @@
 import adsk.core, adsk.fusion
-from ....common.util import spline
+from ..state import spline
 
 def input_changed_handler(args: adsk.core.InputChangedEventArgs):
     start_point_input: adsk.core.IntegerSpinnerCommandInput = args.inputs.itemById('startPoint')

@@ -23,7 +23,7 @@ def create_handler(args: adsk.core.CommandCreatedEventArgs):
         inputs = args.command.commandInputs
         
         # Open file button
-        inputs.addBrowserCommandInput('splineDataBtn', 'Spline Data', 'commands/spline/resources/browse.html', 28)
+        inputs.addBrowserCommandInput('splineDataBtn', 'Spline Data', 'common/resources/browse.html', 28)
 
         # Spline rail chooser
         railRow = inputs.addButtonRowCommandInput('railSplines', 'Rail Splines', True)

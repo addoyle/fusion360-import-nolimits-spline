@@ -1,16 +1,11 @@
-import sys, traceback, adsk.core
+import sys, traceback, json, adsk.core
 from typing import Callable
-
-from ..model.Spline import Spline
 
 # Handlers should be added here to keep them in scope
 handlers = []
 
 # Easier access to form inputs
 command_inputs = {}
-
-# Spline data
-spline = Spline()
 
 app = adsk.core.Application.get()
 ui = app.userInterface

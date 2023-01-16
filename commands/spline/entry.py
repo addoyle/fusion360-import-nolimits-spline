@@ -9,7 +9,7 @@ from ... import config
 
 CMD_NAME = 'Import Spline'
 CMD_ID = f'{config.ADDIN_NAME}_{CMD_NAME}'
-CMD_Desc = 'Import NL Spline'
+CMD_Desc = 'Import Spline'
 
 ICON_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'resources', '')
 
@@ -46,5 +46,5 @@ def stop():
         command_definition.deleteMe()
     if panel.controls.count == 0:
         panel.deleteMe()
-    if toolbar_tab.toolbarPanels.count == 0:
+    if toolbar_tab and toolbar_tab.toolbarPanels.count == 0:
         toolbar_tab.deleteMe()
