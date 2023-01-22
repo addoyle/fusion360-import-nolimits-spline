@@ -6,6 +6,8 @@ from .Component import Component
 from .Node import Node
 
 # Beam which connects two nodes
+
+
 class Beam(Colorable, Component):
     # Node constrained to a beam
     class BeamNode(Node):
@@ -23,6 +25,7 @@ class Beam(Colorable, Component):
         time: float
         type: BeamNodeType = BeamNodeType.NODE
     # Beam type
+
     class BeamType(Enum):
         PIPE = 1
         LOOP_BOX_BEAM = 2
@@ -33,7 +36,7 @@ class Beam(Colorable, Component):
         WOOD_CATWALK = 7
         C_BEAM = 8
         CABLE = 9
-    
+
     start: Node
     end: Node
     nodes: BeamNode = []

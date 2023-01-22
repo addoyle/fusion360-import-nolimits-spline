@@ -5,6 +5,8 @@ from .Node import Node
 from .Util import point3d_from_string
 
 # Free node not constrained by other structures
+
+
 class FreeNode(Node, Component):
     pos: adsk.core.Point3D
 

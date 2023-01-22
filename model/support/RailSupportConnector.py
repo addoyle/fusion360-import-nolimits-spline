@@ -7,11 +7,14 @@ from .Node import Node
 from .Util import point3d_from_string
 
 # Track-support connector
+
+
 class RailSupportConnector(Colorable, Component):
     # Nodes involved in connector (typically one)
     class SubNode(Node):
         pos: adsk.core.Point3D
     # Connector variant
+
     class ConnectorType(Enum):
         SIMPLE = 0
         TRACK_DEFAULT = 2
@@ -31,7 +34,7 @@ class RailSupportConnector(Colorable, Component):
     custom_track_index: int = 0
     size: float = 0
     sub_nodes: SubNode = []
-    
+
     def fromXml(xml) -> RailSupportConnector:
         rsc = RailSupportConnector()
         rsc.type = RailSupportConnector.ConnectorType(int(xml.get('type')))

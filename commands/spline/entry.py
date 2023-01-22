@@ -1,7 +1,10 @@
-#Author-Andy Doyle
-#Description-Imports spline data exported from NoLimits
+# Author-Andy Doyle
+# Description-Imports spline data exported from NoLimits
 
-import adsk.core, adsk.fusion, adsk.cam, os
+import adsk.core
+import adsk.fusion
+import adsk.cam
+import os
 
 from .handlers.created_handler import create_handler
 from ...common.util import add_handler, ui
@@ -11,13 +14,16 @@ CMD_NAME = 'Import Spline'
 CMD_ID = f'{config.ADDIN_NAME}_{CMD_NAME}'
 CMD_Desc = 'Import Spline'
 
-ICON_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'resources', '')
+ICON_FOLDER = os.path.join(os.path.dirname(
+    os.path.abspath(__file__)), 'resources', '')
+
 
 def start():
     cmd_def = ui.commandDefinitions.itemById(CMD_ID)
     if cmd_def is None:
-        cmd_def = ui.commandDefinitions.addButtonDefinition(CMD_ID, CMD_NAME, CMD_Desc, ICON_FOLDER)
-    
+        cmd_def = ui.commandDefinitions.addButtonDefinition(
+            CMD_ID, CMD_NAME, CMD_Desc, ICON_FOLDER)
+
     add_handler(cmd_def.commandCreated, create_handler)
 
     workspace = ui.workspaces.itemById(config.WORKSPACE_ID)
@@ -28,10 +34,12 @@ def start():
 
     panel = toolbar_tab.toolbarPanels.itemById(config.PANEL_ID)
     if panel is None:
-        panel = workspace.toolbarPanels.add(config.PANEL_ID, config.PANEL_NAME, '', False)
-    
+        panel = workspace.toolbarPanels.add(
+            config.PANEL_ID, config.PANEL_NAME, '', False)
+
     control: adsk.core.CommandControl = panel.controls.addCommand(cmd_def)
     control.isPromoted = False
+
 
 def stop():
     workspace = ui.workspaces.itemById(config.WORKSPACE_ID)

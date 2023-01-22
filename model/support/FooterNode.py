@@ -7,6 +7,8 @@ from .Colorable import Colorable
 from .Util import point3d_from_string
 
 # Node to connect a beam to the ground
+
+
 class FooterNode(Node, Colorable, Component):
     # Footer shape
     class BaseType(Enum):
@@ -15,6 +17,7 @@ class FooterNode(Node, Colorable, Component):
         WOOD_SQUARE = 2
         WOOD_ROUND = 3
     # Beam-to-footer connection type
+
     class ConnectionType(Enum):
         SIMPLE = 0
         EXTENDED_A = 1
@@ -30,7 +33,9 @@ class FooterNode(Node, Colorable, Component):
         footer.id = int(xml.get('id'))
         footer.pos = point3d_from_string(xml.find('pos').text)
         footer.rotation = float(xml.find('rotation').text)
-        footer.height_above_terrain = float(xml.find('height_above_terrain').text)
+        footer.height_above_terrain = float(
+            xml.find('height_above_terrain').text)
         footer.base_type = FooterNode.BaseType(int(xml.get('basetype')))
-        footer.connection_type = FooterNode.ConnectionType(int(xml.get('contype')))
+        footer.connection_type = FooterNode.ConnectionType(
+            int(xml.get('contype')))
         return footer

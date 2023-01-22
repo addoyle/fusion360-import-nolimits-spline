@@ -5,6 +5,8 @@ from .RailSupportConnector import RailSupportConnector
 from .FreeNode import FreeNode
 
 # Represents a single support structure
+
+
 class Structure:
     footers: FooterNode = []
     rail_support_connectors: RailSupportConnector = []
