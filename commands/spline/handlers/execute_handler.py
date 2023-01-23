@@ -6,7 +6,7 @@ from ..state import spline
 
 
 def execute_handler(args: adsk.core.CommandEventArgs):
-    root = adsk.fusion.Design.cast(app.activeProduct).rootComponent
+    root = adsk.fusion.Design.cast(app.activeProduct).activeComponent
 
     inputs = args.command.commandInputs
 

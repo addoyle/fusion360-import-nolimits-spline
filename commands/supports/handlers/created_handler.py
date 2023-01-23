@@ -3,7 +3,7 @@ import adsk.core
 import adsk.fusion
 
 # from .destroyed_handler import destroy_handler
-# from .execute_handler import execute_handler
+from .execute_handler import execute_handler
 # from .input_changed_handler import input_changed_handler
 from .open_xml_handler import activated_handler, browse_btn_handler
 # from .validate_input_handler import validate_input_handler
@@ -17,7 +17,7 @@ def create_handler(args: adsk.core.CommandCreatedEventArgs):
     try:
         design = adsk.fusion.Design.cast(app.activeProduct)
 
-        # add_handler(args.command.execute, execute_handler)
+        add_handler(args.command.execute, execute_handler)
         # add_handler(args.command.destroy, destroy_handler)
         add_handler(args.command.incomingFromHTML, browse_btn_handler)
         # add_handler(args.command.validateInputs, validate_input_handler)

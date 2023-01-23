@@ -1,5 +1,4 @@
 from __future__ import annotations
-import adsk.core
 from enum import Enum
 from .Component import Component
 from .Node import Node
@@ -22,7 +21,6 @@ class FooterNode(Node, Colorable, Component):
         SIMPLE = 0
         EXTENDED_A = 1
         EXTENDED_B = 2
-    pos: adsk.core.Point3D
     rotation: float
     height_above_terrain: float
     base_type: BaseType = BaseType.SQUARE
@@ -30,7 +28,7 @@ class FooterNode(Node, Colorable, Component):
 
     def fromXml(xml) -> FooterNode:
         footer = FooterNode()
-        footer.id = int(xml.get('id'))
+        footer.id = xml.get('id')
         footer.pos = point3d_from_string(xml.find('pos').text)
         footer.rotation = float(xml.find('rotation').text)
         footer.height_above_terrain = float(
@@ -39,3 +37,12 @@ class FooterNode(Node, Colorable, Component):
         footer.connection_type = FooterNode.ConnectionType(
             int(xml.get('contype')))
         return footer
+
+    def __str__(self):
+        return ' '.join([
+            super().__str__(),
+            f'rotation={self.rotation}',
+            f'height_above_terrain={self.height_above_terrain}',
+            f'base_type={self.base_type.name}',
+            f'connection_type={self.connection_type.name}'
+        ])

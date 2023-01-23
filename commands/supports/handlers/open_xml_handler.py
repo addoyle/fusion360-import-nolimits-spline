@@ -32,8 +32,8 @@ def open_xml(browser_input: adsk.core.BrowserCommandInput):
             browser_input.sendInfoToHTML('update', json.dumps(
                 {'msg': f'{len(supports.structures)} structures'}))
 
-        for id, node in supports.nodes.items():
-            log(f'{id} pos=[x={node.pos.x}, y={node.pos.y}, z={node.pos.z}] __name__={type(node).__name__}')
+        # for struc in supports.structures:
+        #     log(f'{struc}')
 
 
 def add_support_struc(struc):

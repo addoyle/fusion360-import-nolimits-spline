@@ -1,5 +1,4 @@
 from __future__ import annotations
-import adsk.core
 from enum import Enum
 from .Component import Component
 from .Colorable import Colorable
@@ -12,9 +11,9 @@ from .Util import point3d_from_string
 class RailSupportConnector(Colorable, Component):
     # Nodes involved in connector (typically one)
     class SubNode(Node):
-        pos: adsk.core.Point3D
-    # Connector variant
+        rsc: RailSupportConnector
 
+    # Connector variant
     class ConnectorType(Enum):
         SIMPLE = 0
         TRACK_DEFAULT = 2
@@ -35,6 +34,9 @@ class RailSupportConnector(Colorable, Component):
     size: float = 0
     sub_nodes: SubNode = []
 
+    def __init__(self):
+        self.sub_nodes = []
+
     def fromXml(xml) -> RailSupportConnector:
         rsc = RailSupportConnector()
         rsc.type = RailSupportConnector.ConnectorType(int(xml.get('type')))
@@ -44,16 +46,23 @@ class RailSupportConnector(Colorable, Component):
 
         def make_rsc(node):
             sub_node = RailSupportConnector.SubNode()
-            sub_node.id = int(node.get('id'))
+            sub_node.id = node.get('id')
             sub_node.pos = point3d_from_string(node.find('pos').text)
+            sub_node.rsc = rsc
             return sub_node
 
-        # for node in xml.findall('subnode'):
-        #     sub_node = RailSupportConnector.SubNode()
-        #     sub_node.id = int(node.get('id'))
-        #     sub_node.pos = point3d_from_string(node.find('pos').text)
-        #     rsc.sub_nodes.append(sub_node)
-
-        rsc.sub_nodes = map(make_rsc, xml.findall('subnode'))
+        rsc.sub_nodes = list(map(make_rsc, xml.findall('subnode')))
 
         return rsc
+
+    def __str__(self):
+        return ' '.join([
+            f'type={self.type.name}',
+            f'center_rails_coord={self.center_rails_coord}',
+            f'custom_track_intex={self.custom_track_index}',
+            f'size={self.size}',
+            f'sub_nodes={self.sub_nodes}'
+        ])
+
+    def __repr__(self):
+        return self.__str__()

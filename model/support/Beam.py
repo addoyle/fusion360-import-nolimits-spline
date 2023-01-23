@@ -1,5 +1,4 @@
 from __future__ import annotations
-import adsk.core
 from enum import Enum
 from .Colorable import Colorable
 from .Component import Component
@@ -21,11 +20,17 @@ class Beam(Colorable, Component):
             LEDGER_NUTS_SPECIAL = 5
             LEDGER_BOLTS = 6
 
-        pos: adsk.core.Point3D
         time: float
         type: BeamNodeType = BeamNodeType.NODE
-    # Beam type
 
+        def __str__(self):
+            return ' '.join([
+                super().__str__(),
+                f'time={self.time}',
+                f'type={self.type.name}'
+            ])
+
+    # Beam type
     class BeamType(Enum):
         PIPE = 1
         LOOP_BOX_BEAM = 2
@@ -39,6 +44,8 @@ class Beam(Colorable, Component):
 
     start: Node
     end: Node
+    _start: str
+    _end: str
     nodes: BeamNode = []
 
     type: BeamType = BeamType.PIPE
@@ -60,10 +67,13 @@ class Beam(Colorable, Component):
     lod: str = ''
     dim_tunnel: bool = False
 
+    def __init__(self):
+        self.nodes = []
+
     def fromXml(xml) -> Beam:
         beam = Beam()
-        beam.start = int(xml.get('start'))
-        beam.end = int(xml.get('end'))
+        beam._start = xml.get('start')
+        beam._end = xml.get('end')
         beam.type = Beam.BeamType(int(xml.get('type')))
         beam.size1 = float(xml.get('size1'))
         beam.size2 = float(xml.get('size2')) if xml.get('size2') else None
@@ -72,12 +82,15 @@ class Beam(Colorable, Component):
 
         def make_beam_node(node):
             beamnode = Beam.BeamNode()
-            beamnode.id = int(node.get('id'))
+            beamnode.id = node.get('id')
             beamnode.time = float(node.get('pos'))
             beamnode.type = Beam.BeamNode.BeamNodeType(int(node.get('type')))
-            beamnode.edges = [beam]
+            beamnode.edges = {beam}
             return beamnode
 
-        beam.nodes = map(make_beam_node, xml.findall('beamnode'))
+        beam.nodes = list(map(make_beam_node, xml.findall('beamnode')))
 
         return beam
+
+    def __repr__(self):
+        return f'{self.start.id} => {self.end.id}'
