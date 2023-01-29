@@ -1,0 +1,13 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"addin",
+	"id":	"e7cc0517-982b-4ebb-bac4-ccf92f42f314",
+	"author":	"Andy Doyle",
+	"description":	{
+		"":	"Tools for working with exported data from NoLimits 2"
+	},
+	"version":	"",
+	"runOnStartup":	false,
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}
