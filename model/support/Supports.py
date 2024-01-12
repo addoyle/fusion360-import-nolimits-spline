@@ -14,7 +14,6 @@ class Supports:
 
     def __init__(self):
         self.nodes = {}
-        self.rail_connectors = []
         self._structs = []
 
     @property
@@ -22,27 +21,28 @@ class Supports:
         return len(self.structures)
 
     def clear(self):
-        self._structs = []
+        self._structs.clear()
+        self.nodes.clear()
 
     def add_footer(self, xml):
-        self.clear()
+        self._structs.clear()
         footer: FooterNode = FooterNode.fromXml(xml)
         self.nodes[footer.id] = footer
 
     def add_rail_support_connector(self, xml):
-        self.clear()
+        self._structs.clear()
         rsc: RailSupportConnector = RailSupportConnector.fromXml(xml)
         for node in rsc.sub_nodes:
             node: RailSupportConnector.SubNode
             self.nodes[node.id] = node
 
     def add_free_node(self, xml):
-        self.clear()
+        self._structs.clear()
         node: FreeNode = FreeNode.fromXml(xml)
         self.nodes[node.id] = node
 
     def add_beam(self, xml):
-        self.clear()
+        self._structs.clear()
         beam: Beam = Beam.fromXml(xml)
 
         # Set start/end
@@ -72,7 +72,7 @@ class Supports:
         if not bool(self.nodes):
             return []
 
-        if self._structs:
+        if len(self._structs) > 0:
             return self._structs
 
         ungrouped = self.nodes.copy()

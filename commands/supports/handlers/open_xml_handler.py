@@ -18,7 +18,7 @@ def activated_handler(args: adsk.core.CommandEventArgs):
 def open_xml(browser_input: adsk.core.BrowserCommandInput):
     dlg = ui.createFileDialog()
     dlg.title = 'Open NoLimits Supports XML'
-    dlg.filter = 'Comma Separated Values (*.xml);;All Files (*.*)'
+    dlg.filter = 'XML Files (*.xml);;All Files (*.*)'
     if (dlg.showOpen() != adsk.core.DialogResults.DialogOK):
         browser_input.sendInfoToHTML('reset', '{}')
         supports.clear()
@@ -26,6 +26,7 @@ def open_xml(browser_input: adsk.core.BrowserCommandInput):
         tree: ET.ElementTree = ET.parse(dlg.filename)
         xml_root = tree.getroot()
 
+        supports.clear()
         add_support_strucs(xml_root.find('supports'))
 
         if (len(supports.structures)):

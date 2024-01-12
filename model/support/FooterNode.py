@@ -4,6 +4,7 @@ from .Component import Component
 from .Node import Node
 from .Colorable import Colorable
 from .Util import point3d_from_string
+import adsk.core
 
 # Node to connect a beam to the ground
 
@@ -25,6 +26,16 @@ class FooterNode(Node, Colorable, Component):
     height_above_terrain: float
     base_type: BaseType = BaseType.SQUARE
     connection_type: ConnectionType = ConnectionType.SIMPLE
+
+    def getExtent(self, otherNode: Node) -> adsk.core.Point3D:
+        adsk.core.Point3D.create(
+            self.pos.x + (otherNode.pos.x -
+                          self.pos.x) * -.1,
+            self.pos.y + (otherNode.pos.y -
+                          self.pos.y) * -.1,
+            self.pos.z + (otherNode.pos.z -
+                          self.pos.z) * -.1
+        )
 
     def fromXml(xml) -> FooterNode:
         footer = FooterNode()

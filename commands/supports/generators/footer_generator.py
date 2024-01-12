@@ -9,14 +9,14 @@ def generate_footer(plane: adsk.core.Plane, footer: FooterNode):
     extrudes: adsk.fusion.ExtrudeFeatures = root.features.extrudeFeatures
 
     sketch: adsk.fusion.Sketch = root.sketches.add(plane)
-    sketch.name = 'Footers'
+    sketch.name = 'Footer'
 
     pts = sketch.sketchPoints
     lines = sketch.sketchCurves.sketchLines
     circles = sketch.sketchCurves.sketchCircles
     pts.add(footer.pos)
 
-    footer_width = max(v.size1 for v in footer.edges)
+    footer_width = max((v.size1 for v in footer.edges), default=.4)
     corner: adsk.core.Point3D = footer.pos.copy()
 
     if footer.base_type == FooterNode.BaseType.SQUARE:
@@ -31,5 +31,5 @@ def generate_footer(plane: adsk.core.Plane, footer: FooterNode):
 
     footer_profile: adsk.fusion.Profile = sketch.profiles.item(0)
 
-    extrudes.addSimple(footer_profile, adsk.core.ValueInput.createByReal(footer.height_above_terrain),
+    extrudes.addSimple(footer_profile, adsk.core.ValueInput.createByReal(-footer.height_above_terrain),
                        adsk.fusion.FeatureOperations.NewBodyFeatureOperation)

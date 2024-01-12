@@ -5,6 +5,7 @@ from ....common.util import app
 from ..state import supports
 from ....model.support.Structure import Structure
 from ..generators.footer_generator import generate_footer
+from ..generators.beam_generator import generate_beam
 
 
 def execute_handler(args: adsk.core.CommandEventArgs):
@@ -28,10 +29,17 @@ def execute_handler(args: adsk.core.CommandEventArgs):
         plane = plane_selection_input.selection(0).entity
 
         if supports.structures.count:
-            struc: Structure = supports.structures[0]
+            # struc: Structure = supports.structures[0]
+            for struc in supports.structures:
+                # for rasc in struc.rail_support_connectors:
+                #     generate_rasc(plane, rasc)
 
-            for footer in struc.footers:
-                generate_footer(plane, footer)
+                if struc.nodes.values() and list(struc.nodes.values())[0].edges:
+                    generate_beam(plane, list(
+                        struc.nodes.values())[0].edges.pop())
+
+                for footer in struc.footers:
+                    generate_footer(plane, footer)
 
 
 def points_in_range(pts: array, start: int, end: int):
